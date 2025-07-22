@@ -1,22 +1,28 @@
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import ProductCard from './components/productCard'
-import SuperProduct from './components/superProduct'
+import HomePage from './pages/homePage.jsx'
+import LoginPage from './pages/loginPage.jsx'
+import RegisterPage from './pages/registerPage.jsx'
+import AdminPage from './pages/adminPage.jsx'
 
 function App() {
 
   return (
-    <>
-    <div className="w-full h-screen bg-blue-300">
-      <div className="w-[600px] h-[600px] bg-green-900 flex justify-center items-center">
-        <div className="bg-white w-[75px] h-[75px]"></div>
-        <div className="bg-green-500 w-[75px] h-[75px]"></div>
-        <div className="bg-yellow-400 w-[75px] h-[75px]"></div>
-        <div className="bg-red-800 w-[75px] h-[75px]"></div>
+    
+    <BrowserRouter>
+      <div className="w-full h-screen flex justify-center items-center bg-blue-300">
+
+          <Routes path="/">
+            <Route path="/" element={<HomePage/>}/>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
+            <Route path="/admin/*" element={<AdminPage/>}/>
+          </Routes>
+        
       </div>
-    </div>
-      
-    </>
+    </BrowserRouter>
+  
   )
 }
 
