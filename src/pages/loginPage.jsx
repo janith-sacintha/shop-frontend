@@ -9,8 +9,10 @@ export default function LoginPage(){
 
     const navigate = useNavigate()
 
-    function login(){
+    async function login(){
+
         console.log(email,password)
+
         axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users/login", {
             email : email,
             password : password
@@ -21,10 +23,9 @@ export default function LoginPage(){
                 toast.success("Login successful")
 
                 if(response.data.role == "admin"){
-                    //admin page
                     navigate("/admin")
+
                 }else if(response.data.role == "user"){
-                    //user page
                     navigate("/")
                 }
             }
