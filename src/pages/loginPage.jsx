@@ -59,7 +59,7 @@ export default function LoginPage(){
                     } className="border w-[375px] h-[50px] border-purple-400 rounded-2xl p-[25px] text-lg" type="text" placeholder="Password"/>
                 </div>
                 <div>
-                    <button onClick={login} className="w-[150px] h-[40px] bg-blue-500 text-lg text-white rounded-[5px]">
+                    <button onClick={login} className="w-[150px] h-[40px] cursor-pointer bg-blue-500 text-lg text-white rounded-[5px]">
                         Login
                     </button>
                 </div>
