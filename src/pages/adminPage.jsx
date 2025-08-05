@@ -6,6 +6,7 @@ import { MdSettings } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import ProductsAdminPage from "./admin/productsAdminPage";
 import AddProductAdminPage from "./admin/addProductAdminPage";
+import UpdateProductPage from "./admin/updateProduct";
 
 export default function AdminPage(){
     return(
@@ -21,11 +22,12 @@ export default function AdminPage(){
 
             </div>
 
-            <div className="w-[calc(100%-300px)] h-full">
+            <div className="w-[calc(100%-300px)] h-full mt-[15px]">
                 <Routes path="/">
                     <Route path="/" element={<h1>Dashboard</h1>}/>
                     <Route path="/products" element={<ProductsAdminPage/>}/>
                     <Route path="/newProduct" element={<AddProductAdminPage/>}/>
+                    <Route path="/updateProduct" element={<UpdateProductPage/>}></Route>
                     <Route path="/reviews" element={<h1>Reviews</h1>}/>
                     <Route path="/oders" element={<h1>Oders</h1>}/>
                     <Route path="/users" element={<h1>Users</h1>}/>
