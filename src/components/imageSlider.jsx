@@ -8,7 +8,7 @@ export default function ImageSlider(props){
 
     return(
         <div className="w-[400px] h-[600px]">
-            <img className="w-full h-[500px] object-cover rounded-md" src={images[activeImageIndex]}/>
+            <img className="w-full h-[500px] object-cover rounded-md border-[1px] border-blue-600" src={images[activeImageIndex]}/>
             <div className="flex justify-center items-center w-full h-[100px] gap-[10px]">
                 {
                     images.map(
