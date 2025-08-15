@@ -1,13 +1,15 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Loader from "../../components/loader"
 import ImageSlider from "../../components/imageSlider"
+import { addToCart, getCart } from "../../utils/cart"
 
 export default function ProductOverviewPage(){
     const params = useParams()
     const [product , setProduct] = useState(null)
+    const navigate = useNavigate()
     const[status , setStatus] = useState("loading") //loading , success , error - invalid productId
 
     useEffect(
@@ -59,8 +61,29 @@ export default function ProductOverviewPage(){
                             }
                         </div>
                         <div className="w-full flex  items-center mt-[10px] gap-[15px] text-white font-bold text-[15px]">
-                            <button className="h-[40px] w-[200px] bg-orange-500 rounded-md cursor-pointer shadow-xl hover:bg-white border-[1px] border-orange-500 hover:text-orange-500">Add to cart</button>
-                            <button className="h-[40px] w-[200px] bg-green-800 rounded-md cursor-pointer shadow-xl hover:bg-white border-[1px] border-green-800 hover:text-green-700">Buy Now</button>
+                            <button className="h-[40px] w-[200px] bg-orange-500 rounded-md cursor-pointer shadow-xl hover:bg-white border-[1px] border-orange-500 hover:text-orange-500" onClick={
+                                ()=>{
+                                    addToCart(product, 1)
+                                    toast.success("Product added to cart")
+                                    console.log(getCart())
+                                }
+                            }>Add to cart</button>
+                            <button className="h-[40px] w-[200px] bg-green-800 rounded-md cursor-pointer shadow-xl hover:bg-white border-[1px] border-green-800 hover:text-green-700"
+                            onClick={
+                                ()=>{
+                                    navigate("/checkout" , {state : {items:
+                                        [
+                                            {
+                                                productId : product.productId,
+                                                quantity : 1,
+                                                name : product.name,
+                                                image : product.images[0],
+                                                price : product.price
+                                            }
+                                        ]
+                                    }})
+                                }
+                            }>Buy Now</button>
                         </div>
                     </div>
                 </div>
