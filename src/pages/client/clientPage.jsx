@@ -13,6 +13,7 @@ export default function ClientWebPage (){
             <Routes path="/">
                 <Route path="/" element={<h1 className="text-3xl text-black text-center">Home page</h1>}/>
                 <Route path="/products" element={<ProductsPage/>}/>
+                <Route path="/products/search/:keyword" element={<ProductsPage/>}/>
                 <Route path="/cart" element={<CartPage/>}/>
                 <Route path="/checkout" element={<CheckoutPage/>}/>
                 <Route path="/overview/:productId" element={<ProductOverviewPage/>}/>

@@ -1,5 +1,6 @@
 import { BiCart } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
+import SearchBar from "./searchBar";
 
 export default function Header () {
     return (
@@ -9,6 +10,7 @@ export default function Header () {
             <Link className="text-xl ml-4 font-bold" to="/reviews">Reviews</Link> 
             <Link className="text-xl ml-4 font-bold" to="/about-us">About Us</Link>   
             <Link className="text-xl ml-4 font-bold" to="/contact-us">Contact Us</Link>
+            <SearchBar/>
             <Link className="absolute right-[80px]" to="/cart"><BiCart className="text-2xl ml-4 font-bold"/></Link>
         </header>
     )

@@ -2,7 +2,6 @@ import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { BiTrash } from "react-icons/bi"
-import { HiEye } from "react-icons/hi"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
 export default function CheckoutPage(){
