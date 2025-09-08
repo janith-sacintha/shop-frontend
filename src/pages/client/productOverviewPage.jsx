@@ -6,91 +6,111 @@ import Loader from "../../components/loader"
 import ImageSlider from "../../components/imageSlider"
 import { addToCart, getCart } from "../../utils/cart"
 
-export default function ProductOverviewPage(){
-    const params = useParams()
-    const [product , setProduct] = useState(null)
-    const navigate = useNavigate()
-    const[status , setStatus] = useState("loading") //loading , success , error - invalid productId
+export default function ProductOverviewPage() {
+  const params = useParams()
+  const [product, setProduct] = useState(null)
+  const navigate = useNavigate()
+  const [status, setStatus] = useState("loading")
 
-    useEffect(
-        ()=>{
-            if(status == "loading"){
-                axios.get(import.meta.env.VITE_BACKEND_URL+"/api/products/"+params.productId).then(
-                    (res)=>{
-                        console.log(res.data)
-                        setProduct(res.data)
-                        setStatus("success")
-                    }
-                ).catch(
-                    (error)=>{
-                        setStatus("error")
-                        toast.error("Failed to fetch product")
-                    }
-                )
-            }
+  useEffect(() => {
+    if (status === "loading") {
+      axios
+        .get(import.meta.env.VITE_BACKEND_URL + "/api/products/" + params.productId)
+        .then((res) => {
+          setProduct(res.data)
+          setStatus("success")
+        })
+        .catch(() => {
+          setStatus("error")
+          toast.error("Failed to fetch product")
+        })
+    }
+  }, [status])
 
-        },
-        [status]
-    )
+  return (
+    <div className="w-full h-screen flex items-center justify-center bg-gray-50">
+      {status === "loading" && <Loader />}
 
-    return(
-        <div className="w-full h-full flex">
-            {
-                status == "loading" && <Loader/>
-            }
-            {
-                status == "success" && <div className="w-full h-full flex">
-                    <div className="w-[49%] h-full flex flex-col items-center justify-center">
-                            <ImageSlider images={product.images}/>
-                    </div>
-                    <div className="w-[49%] h-full flex flex-col pt-[40px]">
-                        <h1 className="text-2xl font-bold">{product.name}</h1>
-                        <span className="font-light text-orange-500">{product.altNames.join(" | ")}</span>
-                        <p className="mt-[30px]">{product.description}</p>
-                        <div className="mt-[20px]">
-                            {
-                                product.labelledPrice > product.price? 
-                                <div>
-                                    <span className="line-through mr-[20px] text-red-500 font-semiboLKR">{product.labelledPrice}</span>
-                                    <span className="text-2xl text-green-800 font-bold">LKR {product.price.toLocaleString('en-us' , {minimumFractionDigits : 2 , maximumFractionDigitd : 2})}</span>
-                                </div>
-                                :
-                                <div>
-                                    <span className="text-2xl text-green-800 font-bold">LKR {product.price.toLocaleString('en-us' , {minimumFractionDigits : 2 , maximumFractionDigitd : 2})}</span>
-                                </div>
-                            }
-                        </div>
-                        <div className="w-full flex  items-center mt-[10px] gap-[15px] text-white font-bold text-[15px]">
-                            <button className="h-[40px] w-[200px] bg-orange-500 rounded-md cursor-pointer shadow-xl hover:bg-white border-[1px] border-orange-500 hover:text-orange-500" onClick={
-                                ()=>{
-                                    addToCart(product, 1)
-                                    toast.success("Product added to cart")
-                                    console.log(getCart())
-                                }
-                            }>Add to cart</button>
-                            <button className="h-[40px] w-[200px] bg-green-800 rounded-md cursor-pointer shadow-xl hover:bg-white border-[1px] border-green-800 hover:text-green-700"
-                            onClick={
-                                ()=>{
-                                    navigate("/checkout" , {state : {items:
-                                        [
-                                            {
-                                                productId : product.productId,
-                                                quantity : 1,
-                                                name : product.name,
-                                                image : product.images[0],
-                                                price : product.price
-                                            }
-                                        ]
-                                    }})
-                                }
-                            }>Buy Now</button>
-                        </div>
-                    </div>
+      {status === "success" && (
+        <div className="w-[1200px] h-[700px] bg-white shadow-2xl rounded-2xl flex overflow-hidden">
+          
+          <div className="w-[50%] h-full flex items-center justify-center bg-gray-100">
+            <ImageSlider images={product.images} />
+          </div>
+
+          <div className="w-[50%] h-full flex flex-col px-12 py-10">
+            <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
+            <span className="text-sm text-orange-500 mt-2">
+              {product.altNames.join(" | ")}
+            </span>
+
+            <p className="mt-6 text-gray-600 leading-relaxed text-justify">
+              {product.description}
+            </p>
+
+            <div className="mt-8">
+              {product.labelledPrice > product.price ? (
+                <div className="flex items-center gap-4">
+                  <span className="line-through text-red-500 text-lg">
+                    LKR {product.labelledPrice.toLocaleString("en-us")}
+                  </span>
+                  <span className="text-3xl text-green-700 font-bold">
+                    LKR{" "}
+                    {product.price.toLocaleString("en-us", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </span>
                 </div>
-            }
-            {
-                status == "error" && <div>Producut error</div>
-            }
+              ) : (
+                <span className="text-3xl text-green-700 font-bold">
+                  LKR{" "}
+                  {product.price.toLocaleString("en-us", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              )}
+            </div>
+
+            <div className="mt-10 flex gap-6">
+              <button
+                className="w-[200px] h-[50px] bg-orange-500 rounded-lg text-white font-semibold shadow-md hover:bg-white hover:text-orange-500 border-2 border-orange-500 transition"
+                onClick={() => {
+                  addToCart(product, 1)
+                  toast.success("Product added to cart")
+                }}
+              >
+                Add to Cart
+              </button>
+              <button
+                className="w-[200px] h-[50px] bg-green-700 rounded-lg text-white font-semibold shadow-md hover:bg-white hover:text-green-700 border-2 border-green-700 transition"
+                onClick={() => {
+                  navigate("/checkout", {
+                    state: {
+                      items: [
+                        {
+                          productId: product.productId,
+                          quantity: 1,
+                          name: product.name,
+                          image: product.images[0],
+                          price: product.price,
+                        },
+                      ],
+                    },
+                  })
+                }}
+              >
+                Buy Now
+              </button>
+            </div>
+          </div>
         </div>
-    )
+      )}
+
+      {status === "error" && (
+        <div className="text-red-600 font-semibold">Product not found</div>
+      )}
+    </div>
+  )
 }

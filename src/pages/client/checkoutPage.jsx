@@ -72,6 +72,8 @@ async function placeOrder(){
                                 <div className="w-[300px] flex flex-col justify-center p-[20px] font-bold">
                                     <h1>{item.name}</h1>
                                     <p className="font-semibold">LKR {item.price.toLocaleString('en-us' , {minimumFractionDigits : 2 , maximumFractionDigitd : 2})}</p>
+                                    <Link to={`/overview/${item.productId}`} className="text-red-500 text-sm h-[30px] w-[150px] rounded-md bg-red-200 flex items-center justify-center">view product info &raquo;</Link>
+
                                 </div>
                                 <div className="w-[100px] flex justify-center items-center gap-[10px]">
                                     <button className="w-[30px] h-[30px] bg-blue-500 text-white font-bold rounded-sm cursor-pointer hover:bg-blue-300 flex items-center justify-center" onClick={
