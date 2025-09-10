@@ -4,6 +4,9 @@ import ProductsPage from "./productsPage.jsx";
 import ProductOverviewPage from "./productOverviewPage.jsx";
 import CartPage from "./cart.jsx";
 import CheckoutPage from "./checkoutPage.jsx";
+import HomePage from "../homePage.jsx";
+import ContactUsPage from "../contastUsPage.jsx";
+import AboutUsPage from "../aboutUsPage.jsx";
 
 export default function ClientWebPage (){
     return(
@@ -11,15 +14,15 @@ export default function ClientWebPage (){
             <Header/>
             <div className="w-full h-[calc(100%-100px)] ">
             <Routes path="/">
-                <Route path="/" element={<h1 className="text-3xl text-black text-center">Home page</h1>}/>
+                <Route path="/" element={<HomePage/>}/>
                 <Route path="/products" element={<ProductsPage/>}/>
                 <Route path="/products/search/:keyword" element={<ProductsPage/>}/>
                 <Route path="/cart" element={<CartPage/>}/>
                 <Route path="/checkout" element={<CheckoutPage/>}/>
                 <Route path="/overview/:productId" element={<ProductOverviewPage/>}/>
                 <Route path="/reviews" element={<h1 className="text-3xl text-black text-center">Review page</h1>}/>
-                <Route path="/about-us" element={<h1 className="text-3xl text-black text-center">About Us page</h1>}/>
-                <Route path="/contact-us" element={<h1 className="text-3xl text-black text-center">Contact US page</h1>}/>
+                <Route path="/about-us" element={<AboutUsPage/>}/>
+                <Route path="/contact-us" element={<ContactUsPage/>}/>
                 <Route path="/*" element={<h1 className="text-3xl text-black text-center">404 Not Found</h1>}/>
             </Routes>
             </div>

@@ -65,7 +65,7 @@ export default function CartPage() {
             </div>
 
             <button
-              className="absolute -right-10 w-9 h-9 bg-red-600 text-white rounded-full flex items-center justify-center border-2 border-red-600 hover:bg-white hover:text-red-600 transition"
+              className="cursor-pointer absolute -right-10 w-9 h-9 bg-red-600 text-white rounded-full flex items-center justify-center border-2 border-red-600 hover:bg-white hover:text-red-600 transition"
               onClick={() => {
                 addToCart(item, -item.quantity)
                 setCart(getCart())
@@ -91,7 +91,7 @@ export default function CartPage() {
 
         <div className="flex gap-4">
           <button
-            className="w-[200px] h-[45px] rounded-lg border-2 border-blue-500 bg-blue-500 text-white font-semibold hover:bg-white hover:text-blue-500 transition"
+            className="cursor-pointer w-[200px] h-[45px] rounded-lg border-2 border-blue-500 bg-blue-500 text-white font-semibold hover:bg-white hover:text-blue-500 transition"
             onClick={() => {
               navigate("/products")
             }}
@@ -100,7 +100,7 @@ export default function CartPage() {
           </button>
 
           <button
-            className="w-[200px] h-[45px] rounded-lg border-2 border-orange-500 bg-orange-500 text-white font-semibold hover:bg-white hover:text-orange-500 transition"
+            className="cursor-pointer w-[200px] h-[45px] rounded-lg border-2 border-orange-500 bg-orange-500 text-white font-semibold hover:bg-white hover:text-orange-500 transition"
             onClick={() => {
               navigate("/checkout", { state: { items: cart } })
             }}
