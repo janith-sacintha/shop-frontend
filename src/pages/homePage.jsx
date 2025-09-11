@@ -44,24 +44,6 @@ export default function HomePage(){
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg">I</div>
-            <div>
-              <h1 className="text-xl font-extrabold leading-tight">itoya</h1>
-              <p className="text-xs text-gray-500 -mt-1">Stationery • Printing • Toys • Decor</p>
-            </div>
-          </Link>
-
-          <nav className="flex items-center gap-4">
-            <Link to="/products" className="text-sm hover:underline">Shop</Link>
-            <Link to="/about-us" className="text-sm hover:underline">About Us</Link>
-            <Link to="/contact-us" className="hidden md:inline-flex items-center gap-2 text-sm px-3 py-2 rounded-md bg-indigo-50 hover:bg-indigo-100"><FiPhone /> Contact</Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Hero */}
       <main className="max-w-6xl mx-auto px-6 py-12">

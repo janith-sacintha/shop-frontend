@@ -6,7 +6,7 @@ export default function ProductCard({ product }) {
       to={`/overview/${product.productId}`}
       className="group relative flex flex-col w-72 h-[420px] bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
     >
-      {/* Product Image */}
+
       <div className="relative w-full h-64 overflow-hidden">
         <img
           src={product.images[0]}
@@ -20,7 +20,6 @@ export default function ProductCard({ product }) {
         )}
       </div>
 
-      {/* Product Info */}
       <div className="flex-1 flex flex-col justify-between p-4">
         <div>
           <span className="text-xs text-gray-400">{product.productId}</span>
@@ -29,7 +28,6 @@ export default function ProductCard({ product }) {
           </h2>
         </div>
 
-        {/* Price Section */}
         <div className="mt-2">
           {product.labelledPrice > product.price ? (
             <div className="flex items-center gap-2">

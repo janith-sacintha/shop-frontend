@@ -57,10 +57,13 @@ export default function ProductsAdminPage() {
                     <td className="p-4 font-medium text-gray-700">
                       {product.name}
                     </td>
-                    <td className="p-4 text-green-600 font-semibold ">
-                      LKR {product.price}
+                    <td className="p-4 text-green-600 font-semibold text-center">
+                      LKR {product.price.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                        })}
                     </td>
-                    <td className="p-4 line-through text-gray-500 ">
+                    <td className="p-4 line-through text-gray-500 text-center">
                       LKR {product.labelledPrice}
                     </td>
                     <td className="p-4">{product.category}</td>

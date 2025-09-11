@@ -7,10 +7,11 @@ import CheckoutPage from "./checkoutPage.jsx";
 import HomePage from "../homePage.jsx";
 import ContactUsPage from "../contastUsPage.jsx";
 import AboutUsPage from "../aboutUsPage.jsx";
+import OrdersPage from "./ordersPage.jsx";
 
 export default function ClientWebPage (){
     return(
-        <div className="w-full h-screen max-h-screen ">
+        <div className="w-full h-screen max-h-screen flex flex-col ">
             <Header/>
             <div className="w-full h-[calc(100%-100px)] ">
             <Routes path="/">
@@ -23,6 +24,7 @@ export default function ClientWebPage (){
                 <Route path="/reviews" element={<h1 className="text-3xl text-black text-center">Review page</h1>}/>
                 <Route path="/about-us" element={<AboutUsPage/>}/>
                 <Route path="/contact-us" element={<ContactUsPage/>}/>
+                <Route path="/my-orders" element={<OrdersPage/>}/>
                 <Route path="/*" element={<h1 className="text-3xl text-black text-center">404 Not Found</h1>}/>
             </Routes>
             </div>

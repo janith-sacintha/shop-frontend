@@ -5,7 +5,7 @@ export default function ContactUsPage() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <main className="max-w-4xl mx-auto px-6 py-12">
-        {/* Header */}
+
         <header className="mb-12 text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600">Contact Us</h1>
           <p className="mt-3 text-lg text-gray-700">
@@ -13,7 +13,6 @@ export default function ContactUsPage() {
           </p>
         </header>
 
-        {/* Contact Info */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white p-6 rounded-lg shadow-sm text-center">
             <FiMapPin className="mx-auto text-2xl text-indigo-600" />
@@ -34,7 +33,6 @@ export default function ContactUsPage() {
           </div>
         </section>
 
-        {/* Contact Form */}
         <section className="bg-white p-8 rounded-lg shadow-sm">
           <h2 className="text-2xl font-bold mb-4">Send us a message</h2>
           <form className="grid grid-cols-1 gap-6">

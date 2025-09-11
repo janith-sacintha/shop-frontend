@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import Loader from "../../components/loader"
 import ProductCard from "../../components/productCard"
 import { useParams } from "react-router-dom"
+import SearchBar from "../../components/searchBar"
 
 export default function ProductsPage (){
     const [products , setProducts] = useState([])
@@ -55,21 +56,24 @@ export default function ProductsPage (){
     */
 
     return(
-        <div className="w-full h-full">
-            {
-                loading? <Loader/> : 
-                <div className="w-full flex gap-[20px] p-[25px] flex-wrap justify-center items-center">
-                    {
-                        products.map(
-                            (product, index)=>{
-                                return(
-                                    <ProductCard key={index} product={product}/>
-                                )
-                            }
-                        )
-                    }
-                </div>
-            }
+        <div className="w-full h-full flex flex-col gap-5">
+            <div className="p-[15px] flex items-center justify-center bg-blue-200"><SearchBar/></div>
+            <div className="w-full h-full">
+                { 
+                    loading? <Loader/> : 
+                    <div className="w-full flex gap-[20px] p-[25px] flex-wrap justify-center items-center">
+                        {
+                            products.map(
+                                (product, index)=>{
+                                    return(
+                                        <ProductCard key={index} product={product}/>
+                                    )
+                                }
+                            )
+                        }
+                    </div>
+                }
+            </div>
         </div>
     )
         
