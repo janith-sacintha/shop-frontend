@@ -23,7 +23,7 @@ export default function ProductsAdminPage() {
   return (
     <div className="w-full h-full bg-gray-100 p-6">
       {isLoading ? (
-        <Loader />
+        <Loader/>
       ) : (
         <div className="bg-white shadow-xl rounded-xl overflow-hidden">
           <table className="w-full border-collapse">
