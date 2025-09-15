@@ -1,6 +1,6 @@
 import { Link, Route, Routes } from "react-router-dom";
 import { GiShoppingBag } from "react-icons/gi";
-import { BiSolidMessageSquareError } from "react-icons/bi";
+import { BiChat, BiSolidMessageSquareError } from "react-icons/bi";
 import { HiMiniShoppingCart } from "react-icons/hi2";
 import { MdSettings } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
@@ -8,6 +8,8 @@ import ProductsAdminPage from "./admin/productsAdminPage";
 import AddProductAdminPage from "./admin/addProductAdminPage";
 import UpdateProductPage from "./admin/updateProduct";
 import OrdersPage from "./admin/odersPage";
+import AdminChatPanel from "./admin/chatsPage";
+import UpdateOrderPage from "./admin/orderUpdatePage";
 
 export default function AdminPage(){
     return(
@@ -16,8 +18,9 @@ export default function AdminPage(){
                 <span className="font-bold text-3xl my-5 text-purple-500">Admin Panel</span>
                 <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/products"><GiShoppingBag/>Products</Link>
                 <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/reviews"><BiSolidMessageSquareError/>Reviews</Link>
-                <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/orders"><HiMiniShoppingCart/>Oders</Link>
+                <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/orders"><HiMiniShoppingCart/>Orders</Link>
                 <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/users"><FaUser/>Users</Link>
+                <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/chats"><BiChat/>Chats</Link>
                 <Link className="flex items-center p-[25px] gap-[25px] text-2xl w-full h-[60px]" to="/admin/setting"><MdSettings/>Setting</Link>
 
 
@@ -30,9 +33,10 @@ export default function AdminPage(){
                     <Route path="/newProduct" element={<AddProductAdminPage/>}/>
                     <Route path="/updateProduct" element={<UpdateProductPage/>}></Route>
                     <Route path="/orders" element={<OrdersPage/>}/>
+                    <Route path="/updateOrder" element={<UpdateOrderPage/>}/>
+                    <Route path="/chats" element={<AdminChatPanel/>}/>
                     <Route path="/reviews" element={<h1>reviews</h1>}/>
                     <Route path="/users" element={<h1>Users</h1>}/>
-                    
                 </Routes>
             </div>
         </div>

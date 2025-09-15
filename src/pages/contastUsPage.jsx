@@ -23,6 +23,7 @@ export default function ContactUsPage() {
         })
         .then((res) => {
           setName(res.data.name)
+          setEmail(res.data.email)
         })
         .catch((error) => console.log(error))
     }, [navigate])

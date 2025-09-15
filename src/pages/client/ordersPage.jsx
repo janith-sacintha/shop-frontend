@@ -76,7 +76,24 @@ export default function OrdersPage(){
                                     maximumFractionDigits: 2,})}
                                 </td>
                                 <td className="p-3">{new Date(order.date).toLocaleDateString()}</td>
-                                <td className="p-3 capitalize">{order.status}</td>
+                                
+                                <td className="p-3">
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold tracking-wide capitalize ${
+                                        {
+                                            delivered: "bg-green-500 text-white shadow-md",
+                                            processing: "bg-amber-500 text-white shadow-md",
+                                            cancelled: "bg-rose-600 text-white shadow-md",
+                                            shipped: "bg-indigo-600 text-white shadow-md",
+                                            pending: "bg-sky-500 text-white shadow-md",
+                                        }[order.status.toLowerCase()] || "bg-gray-400 text-white shadow-md"
+                                        }`}
+                                    >
+                                        {order.status}
+                                    </span>
+                                    </td>
+
+
                             </tr>
                             ))}
                         </tbody>
