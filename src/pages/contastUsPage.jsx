@@ -22,7 +22,7 @@ export default function ContactUsPage() {
         headers: { Authorization: "Bearer " + token },
       })
       .then((res) => {
-        setName(res.data.name)
+        setName(res.data.name.firstName+"-"+res.data.name.lastName)
         setEmail(res.data.email)
       })
       .catch(() => {})

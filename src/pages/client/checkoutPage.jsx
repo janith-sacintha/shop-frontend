@@ -27,7 +27,7 @@ export default function CheckoutPage() {
       })
       .then((res) => {
         setUser(res.data)
-        setName(res.data.name)
+        setName(res.data.name.firstName+"-"+ res.data.name.lastName)
       })
       .catch((error) => console.log(error))
   }, [navigate])
