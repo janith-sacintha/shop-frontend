@@ -8,6 +8,9 @@ import HomePage from "../homePage.jsx";
 import ContactUsPage from "../contastUsPage.jsx";
 import AboutUsPage from "../aboutUsPage.jsx";
 import OrdersPage from "./ordersPage.jsx";
+import OrderDetailsPage from "./orderDetailsPage.jsx";
+import DeliveredProductsPage from "./deliveredProductsPage.jsx";
+import ReviewsPage from "./reviewsPage.jsx";
 
 export default function ClientWebPage (){
     return(
@@ -21,10 +24,12 @@ export default function ClientWebPage (){
                 <Route path="/cart" element={<CartPage/>}/>
                 <Route path="/checkout" element={<CheckoutPage/>}/>
                 <Route path="/overview/:productId" element={<ProductOverviewPage/>}/>
-                <Route path="/reviews" element={<h1 className="text-3xl text-black text-center">Review page</h1>}/>
+                <Route path="/reviews" element={<DeliveredProductsPage/>}/>
+                <Route path="/reviews/:productId" element={<ReviewsPage/>} />
                 <Route path="/about-us" element={<AboutUsPage/>}/>
                 <Route path="/contact-us" element={<ContactUsPage/>}/>
                 <Route path="/my-orders" element={<OrdersPage/>}/>
+                <Route path="/my-orders/:orderId" element={<OrderDetailsPage />} />
                 <Route path="/*" element={<h1 className="text-3xl text-black text-center">404 Not Found</h1>}/>
             </Routes>
             </div>

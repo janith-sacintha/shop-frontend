@@ -1,17 +1,72 @@
-import { BiCart, BiShoppingBag, BiUser } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { BiCart, BiShoppingBag, BiUser } from "react-icons/bi"
+import { Link } from "react-router-dom"
 
-export default function Header () {
-    return (
-        <header className="h-[100px] text-white bg-orange-500 flex justify-center items-center sticky top-0 z-30">
-            <Link className="text-xl ml-4 font-bold" to="/">Home</Link>  
-            <Link className="text-xl ml-4 font-bold" to="/products">Products</Link>
-            <Link className="text-xl ml-4 font-bold" to="/reviews">Reviews</Link> 
-            <Link className="text-xl ml-4 font-bold" to="/about-us">About Us</Link>   
-            <Link className="text-xl ml-4 font-bold" to="/contact-us">Contact Us</Link>
-            <Link className="absolute right-[350px] text-2xl font-bold bg-blue-800 w-[40px] h-[40px] flex items-center justify-center rounded-full" to="/register"><BiUser/></Link>
-            <Link className="absolute right-[150px] text-lg flex bg-yellow-400 text-blue-700 font-bold rounded-xl p-[5px]" to="/my-orders"><span>My Orders</span><BiShoppingBag className="text-2xl ml-2 font-bold"/></Link>
-            <Link className="absolute right-[80px] bg-yellow-400 text-blue-700 font-bold rounded-full h-[40px] w-[55px] flex items-center" to="/cart"><BiCart className="text-2xl ml-4 font-bold"/></Link>
-        </header>
-    )
+export default function Header() {
+  return (
+    <header className="h-20 bg-gradient-to-r from-orange-500 to-orange-600 text-white sticky top-0 z-30 shadow-lg">
+      <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-8">
+        <div className="flex items-center gap-8">
+          <Link
+            to="/"
+            className="text-2xl font-extrabold tracking-wide hover:text-yellow-300 transition"
+          >
+            itoya
+          </Link>
+          <nav className="hidden md:flex gap-6 font-medium text-lg">
+            <Link
+              to="/products"
+              className="hover:text-yellow-200 transition"
+            >
+              Products
+            </Link>
+            <Link
+              to="/reviews"
+              className="hover:text-yellow-200 transition"
+            >
+              Reviews
+            </Link>
+            <Link
+              to="/about-us"
+              className="hover:text-yellow-200 transition"
+            >
+              About Us
+            </Link>
+            <Link
+              to="/contact-us"
+              className="hover:text-yellow-200 transition"
+            >
+              Contact Us
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <Link
+            to="/register"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-orange-600 hover:bg-yellow-200 transition"
+          >
+            <BiUser size={22} />
+          </Link>
+
+          <Link
+            to="/my-orders"
+            className="flex items-center gap-2 bg-yellow-400 text-blue-800 font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition"
+          >
+            <span>My Orders</span>
+            <BiShoppingBag size={22} />
+          </Link>
+
+          <Link
+            to="/cart"
+            className="relative w-10 h-10 flex items-center justify-center rounded-full bg-yellow-400 text-blue-800 hover:bg-yellow-300 transition"
+          >
+            <BiCart size={22} />
+            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              2
+            </span>
+          </Link>
+        </div>
+      </div>
+    </header>
+  )
 }

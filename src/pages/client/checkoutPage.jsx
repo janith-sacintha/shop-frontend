@@ -16,7 +16,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token")
-    if (token == null) {
+    if (!token) {
       navigate("/login")
       return
     }
@@ -46,12 +46,12 @@ export default function CheckoutPage() {
     if (!token) {
       toast.error("Login first to place the Order")
       navigate("/login")
-      return;
+      return
     }
 
     if (!name || !address || !phone) {
       toast.error("Please fill in all details before placing the order")
-      return;
+      return
     }
 
     const order = {
@@ -69,7 +69,6 @@ export default function CheckoutPage() {
         headers: { Authorization: `Bearer ${token}` },
       })
       toast.success("Order placed successfully")
-      console.log(order)
       navigate("/my-orders")
     } catch (error) {
       console.error(error)
@@ -78,108 +77,120 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center py-10 gap-6 bg-gray-50">
-      {cart.map((item, index) => (
-        <div
-          key={item.productId}
-          className="w-[700px] h-[160px] shadow-lg rounded-lg border border-purple-300 flex items-center p-6 relative bg-white"
-        >
-          <img
-            src={item.image}
-            className="w-[100px] h-[100px] object-cover rounded-md"
-          />
-          <div className="w-[300px] flex flex-col justify-center px-6 font-bold">
-            <h1 className="text-lg text-gray-700">{item.name}</h1>
-            <p className="font-semibold text-green-600">
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-purple-50 py-12 flex flex-col items-center gap-10">
+      <h1 className="text-3xl font-extrabold text-indigo-600 tracking-wide">
+        Checkout
+      </h1>
+
+      {/* Cart Items */}
+      <div className="flex flex-col gap-6 w-full max-w-4xl">
+        {cart.map((item, index) => (
+          <div
+            key={item.productId}
+            className="flex items-center bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition overflow-hidden"
+          >
+            <img
+              src={item.image}
+              className="w-32 h-32 object-cover rounded-l-2xl"
+            />
+
+            <div className="flex-1 px-6 py-4 flex flex-col justify-center">
+              <h2 className="text-lg font-semibold text-gray-800">
+                {item.name}
+              </h2>
+              <p className="text-purple-600 font-bold">
+                LKR{" "}
+                {item.price.toLocaleString("en-us", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+              <Link
+                to={`/overview/${item.productId}`}
+                className="mt-2 text-sm text-blue-600 hover:underline"
+              >
+                View product info →
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-3 px-4">
+              <button
+                className="w-9 h-9 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-400 transition"
+                onClick={() => {
+                  const newCart = [...cart]
+                  newCart[index].quantity -= 1
+                  if (newCart[index].quantity <= 0) newCart.splice(index, 1)
+                  setCart(newCart)
+                }}
+              >
+                −
+              </button>
+              <span className="w-6 text-center font-medium">
+                {item.quantity}
+              </span>
+              <button
+                className="w-9 h-9 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-400 transition"
+                onClick={() => {
+                  const newCart = [...cart]
+                  newCart[index].quantity += 1
+                  setCart(newCart)
+                }}
+              >
+                +
+              </button>
+            </div>
+
+            <div className="px-6 font-semibold text-gray-700">
               LKR{" "}
-              {item.price.toLocaleString("en-us", {
+              {(item.quantity * item.price).toLocaleString("en-us", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
-            </p>
-            <Link
-              to={`/overview/${item.productId}`}
-              className="mt-2 text-sm rounded-md bg-red-100 text-red-600 text-center h-[30px] w-[150px] py-1 hover:bg-red-200 transition"
-            >
-              view product info &raquo;
-            </Link>
-          </div>
+            </div>
 
-          <div className="w-[120px] flex justify-center items-center gap-3">
             <button
-              className="cursor-pointer w-8 h-8 bg-blue-500 text-white font-bold rounded hover:bg-blue-600 transition"
+              className="mr-6 p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition"
               onClick={() => {
                 const newCart = [...cart]
-                newCart[index].quantity -= 1
-                if (newCart[index].quantity <= 0) newCart.splice(index, 1)
+                newCart.splice(index, 1)
                 setCart(newCart)
               }}
             >
-              -
-            </button>
-            <span className="w-6 text-center font-semibold">
-              {item.quantity}
-            </span>
-            <button
-              className="cursor-pointer w-8 h-8 bg-blue-500 text-white font-bold rounded hover:bg-blue-600 transition"
-              onClick={() => {
-                const newCart = [...cart]
-                newCart[index].quantity += 1
-                setCart(newCart)
-              }}
-            >
-              +
+              <BiTrash size={20} />
             </button>
           </div>
+        ))}
+      </div>
 
-          <div className="w-[180px] flex items-center justify-end text-gray-700 font-semibold">
-            LKR{" "}
-            {(item.quantity * item.price).toLocaleString("en-us", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </div>
-
-          <button
-            className="cursor-pointer absolute right-[-55px] w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center border-2 border-red-600 hover:bg-white hover:text-red-600 transition"
-            onClick={() => {
-              const newCart = [...cart]
-              newCart.splice(index, 1)
-              setCart(newCart)
-            }}
-          >
-            <BiTrash />
-          </button>
-        </div>
-      ))}
-
-      <div className="w-[700px] bg-white shadow-lg rounded-md border p-6 space-y-4">
-        <h2 className="text-lg font-bold text-gray-700">Customer Details</h2>
+      {/* Customer Details */}
+      <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl border border-gray-100 p-8 space-y-5">
+        <h2 className="text-xl font-bold text-gray-800">Customer Details</h2>
         <input
           type="text"
           placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
         />
         <input
           type="text"
           placeholder="Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
         />
         <input
           type="tel"
           placeholder="Phone Number"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
         />
       </div>
 
-      <div className="relative w-[700px] h-[120px] shadow-lg rounded-md border border-blue-300 flex flex-col justify-center items-end px-6 bg-white">
-        <span className="font-bold text-lg text-gray-700">
+      {/* Total + Place Order */}
+      <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl border border-gray-100 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <span className="text-xl font-bold text-gray-800">
           Total:{" "}
           <span className="text-green-600">
             LKR{" "}
@@ -189,8 +200,9 @@ export default function CheckoutPage() {
             })}
           </span>
         </span>
+
         <button
-          className="cursor-pointer mt-2 w-[200px] h-[45px] rounded-md border-2 border-orange-500 bg-orange-500 text-white font-bold hover:bg-white hover:text-orange-500 hover:scale-105 transition"
+          className="px-8 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold hover:opacity-90 hover:scale-105 transition"
           onClick={placeOrder}
         >
           Place Order

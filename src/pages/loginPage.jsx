@@ -62,7 +62,7 @@ export default function LoginPage() {
         {/* Login Button */}
         <button
           onClick={login}
-          className="w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition"
+          className="cursor-pointer w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition"
         >
           Login
         </button>
