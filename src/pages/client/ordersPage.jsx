@@ -11,6 +11,7 @@ import {
   FaShippingFast,
   FaClock,
   FaTimesCircle,
+  FaShoppingBag,
 } from "react-icons/fa"
 
 export default function OrdersPage() {
@@ -31,6 +32,7 @@ export default function OrdersPage() {
       .catch((error) => {
         console.log(error)
         toast.error("Fetching orders failed")
+        setLoading(false)
       })
   }, [])
 
@@ -42,7 +44,7 @@ export default function OrdersPage() {
     return groups
   }, {})
 
-  // Status configurations (title, color, icon)
+  // Status configurations
   const statusConfig = {
     delivered: {
       title: "Delivered Orders",
@@ -86,92 +88,114 @@ export default function OrdersPage() {
             My Orders
           </h1>
 
-          <div className="space-y-12">
-            {Object.keys(statusConfig).map((statusKey) => {
-              const config = statusConfig[statusKey]
-              const ordersByStatus = groupedOrders[statusKey] || []
+          {/* If no orders */}
+          {orders.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-20">
+              <FaShoppingBag className="text-gray-400 text-7xl mb-6" />
+              <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+                No Orders Yet
+              </h2>
+              <p className="text-gray-500 mb-6 max-w-md">
+                Looks like you haven’t placed any orders yet. Start shopping and
+                enjoy our products!
+              </p>
+              <button
+                onClick={() => navigate("/products")}
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition"
+              >
+                Shop Now
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-12">
+              {Object.keys(statusConfig).map((statusKey) => {
+                const config = statusConfig[statusKey]
+                const ordersByStatus = groupedOrders[statusKey] || []
 
-              if (ordersByStatus.length === 0) return null
+                if (ordersByStatus.length === 0) return null
 
-              return (
-                <div key={statusKey}>
-                  {/* Section header */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="text-2xl">{config.icon}</div>
-                    <h2
-                      className={`text-2xl font-bold ${config.color} tracking-tight`}
-                    >
-                      {config.title}
-                    </h2>
-                  </div>
-
-                  {/* Orders grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {ordersByStatus.map((order, i) => (
-                      <div
-                        key={i}
-                        onClick={() => navigate(`/my-orders/${order.orderId}`)}
-                        className={`rounded-2xl shadow-md hover:shadow-xl transition duration-200 p-6 cursor-pointer border border-gray-100 ${config.bg}`}
+                return (
+                  <div key={statusKey}>
+                    {/* Section header */}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="text-2xl">{config.icon}</div>
+                      <h2
+                        className={`text-2xl font-bold ${config.color} tracking-tight`}
                       >
-                        {/* Header */}
-                        <div className="flex justify-between items-center mb-4">
-                          <h2 className="text-lg font-bold text-gray-800">
-                            Order #{order.orderId}
-                          </h2>
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${config.color} bg-white border border-gray-200`}
-                          >
-                            {order.status}
-                          </span>
-                        </div>
+                        {config.title}
+                      </h2>
+                    </div>
 
-                        {/* Order Items Preview */}
-                        <div className="flex gap-4 mb-4">
-                          {order.items.slice(0, 3).map((item, j) => (
-                            <img
-                              key={j}
-                              src={item.image}
-                              alt={item.name}
-                              className="w-16 h-16 rounded-lg object-cover border border-gray-200"
-                            />
-                          ))}
-                          {order.items.length > 3 && (
-                            <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-gray-100 text-gray-600 font-semibold">
-                              +{order.items.length - 3}
-                            </div>
-                          )}
-                        </div>
+                    {/* Orders grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {ordersByStatus.map((order, i) => (
+                        <div
+                          key={i}
+                          onClick={() =>
+                            navigate(`/my-orders/${order.orderId}`)
+                          }
+                          className={`rounded-2xl shadow-md hover:shadow-xl transition duration-200 p-6 cursor-pointer border border-gray-100 ${config.bg}`}
+                        >
+                          {/* Header */}
+                          <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-bold text-gray-800">
+                              Order #{order.orderId}
+                            </h2>
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${config.color} bg-white border border-gray-200`}
+                            >
+                              {order.status}
+                            </span>
+                          </div>
 
-                        {/* Order Info */}
-                        <div className="text-sm text-gray-600 space-y-2">
-                          <p className="flex items-center gap-2">
-                            <FaBoxOpen className="text-indigo-500" />
-                            <span>{order.items.length} items</span>
-                          </p>
-                          <p className="flex items-center gap-2">
-                            <FaMoneyBillWave className="text-green-500" />
-                            <span>
-                              LKR{" "}
-                              {order.total.toLocaleString("en-us", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              })}
-                            </span>
-                          </p>
-                          <p className="flex items-center gap-2">
-                            <FaCalendarAlt className="text-rose-500" />
-                            <span>
-                              {new Date(order.date).toLocaleDateString()}
-                            </span>
-                          </p>
+                          {/* Order Items Preview */}
+                          <div className="flex gap-4 mb-4">
+                            {order.items.slice(0, 3).map((item, j) => (
+                              <img
+                                key={j}
+                                src={item.image}
+                                alt={item.name}
+                                className="w-16 h-16 rounded-lg object-cover border border-gray-200"
+                              />
+                            ))}
+                            {order.items.length > 3 && (
+                              <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-gray-100 text-gray-600 font-semibold">
+                                +{order.items.length - 3}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Order Info */}
+                          <div className="text-sm text-gray-600 space-y-2">
+                            <p className="flex items-center gap-2">
+                              <FaBoxOpen className="text-indigo-500" />
+                              <span>{order.items.length} items</span>
+                            </p>
+                            <p className="flex items-center gap-2">
+                              <FaMoneyBillWave className="text-green-500" />
+                              <span>
+                                LKR{" "}
+                                {order.total.toLocaleString("en-us", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
+                              </span>
+                            </p>
+                            <p className="flex items-center gap-2">
+                              <FaCalendarAlt className="text-rose-500" />
+                              <span>
+                                {new Date(order.date).toLocaleDateString()}
+                              </span>
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>
