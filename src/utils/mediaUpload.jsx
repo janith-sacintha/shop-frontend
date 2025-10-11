@@ -1,5 +1,5 @@
-const url = "https://hjqyqtqncfxkiadwrbno.supabase.co"
-const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqcXlxdHFuY2Z4a2lhZHdyYm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2OTc0NTQsImV4cCI6MjA2OTI3MzQ1NH0.7C9RoFXygweuGh3TpA_PtIKSfZhOi8LcRSYzti4aNe0"
+const url = "https://uydbqgdtmomodjtgfwmx.supabase.co"
+const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5ZGJxZ2R0bW9tb2RqdGdmd214Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTI2NDcsImV4cCI6MjA3MjYyODY0N30.t9IMk2DqNaj63kDmtD5mJFL-2TMJCmQODuFTVcKmlv0"
 
 import { createClient } from "@supabase/supabase-js"
 

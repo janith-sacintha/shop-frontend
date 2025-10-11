@@ -8,19 +8,24 @@ export default function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newReview, setNewReview] = useState({ text: "", rating: 5 });
-  const [editing, setEditing] = useState({}); // key: reviewId -> { text, rating }
+  const [editing, setEditing] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  const token = localStorage.getItem("token");
-  const currentUserId = token ? JSON.parse(atob(token.split(".")[1])).id : null;
+  let token = localStorage.getItem("token");
+  let currentUserId = null;
+  try {
+    if (token) currentUserId = JSON.parse(atob(token.split(".")[1])).id;
+  } catch {
+    token = null;
+    localStorage.removeItem("token");
+  }
 
   const fetchReviews = async () => {
     try {
       const res = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/website-reviews");
       setReviews(res.data);
       setLoading(false);
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to fetch reviews");
       setLoading(false);
     }
@@ -43,7 +48,6 @@ export default function ReviewsPage() {
       setNewReview({ text: "", rating: 5 });
       toast.success("Review submitted!");
     } catch (err) {
-      console.error(err);
       toast.error(err.response?.data?.message || "Failed to submit review");
     } finally {
       setSubmitting(false);
@@ -62,7 +66,6 @@ export default function ReviewsPage() {
       setEditing((prev) => ({ ...prev, [id]: null }));
       toast.success("Review updated!");
     } catch (err) {
-      console.error(err);
       toast.error(err.response?.data?.message || "Failed to update review");
     }
   };
@@ -75,79 +78,104 @@ export default function ReviewsPage() {
       setReviews(reviews.filter((r) => r._id !== id));
       toast.success("Review deleted!");
     } catch (err) {
-      console.error(err);
       toast.error(err.response?.data?.message || "Failed to delete review");
     }
   };
 
   if (loading) return <Loader />;
 
-  return (
-    <div className="min-h-screen bg-gray-100 py-10 flex justify-center">
-      <div className="w-11/12 md:w-3/4 lg:w-2/3 space-y-8">
-        <h1 className="text-3xl font-extrabold text-indigo-700 text-center">Website Reviews</h1>
+  const averageRating =
+    reviews.length > 0
+      ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
+      : null;
 
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
-          <textarea
-            rows={3}
-            placeholder="Write your review..."
-            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            value={newReview.text}
-            onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
-          />
-          <div className="flex items-center gap-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <FaStar
-                key={star}
-                size={20}
-                className={`cursor-pointer ${newReview.rating >= star ? "text-yellow-400" : "text-gray-300"}`}
-                onClick={() => setNewReview({ ...newReview, rating: star })}
-              />
-            ))}
-          </div>
-          <button
-            onClick={submitReview}
-            disabled={submitting}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-50"
-          >
-            Submit Review
-          </button>
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white py-12 flex justify-center">
+      <div className="w-11/12 md:w-3/4 lg:w-2/3 space-y-10">
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl font-extrabold text-indigo-700 tracking-tight">Website Reviews</h1>
+          {averageRating && (
+            <div className="flex justify-center items-center gap-2 text-yellow-500 text-2xl font-bold">
+              <FaStar className="text-yellow-400" />
+              <span>{averageRating}/5</span>
+            </div>
+          )}
         </div>
 
-        <div className="space-y-4">
+        {token ? (
+          <div className="bg-white rounded-2xl shadow-lg p-6 space-y-5 border border-gray-100">
+            <textarea
+              rows={3}
+              placeholder="Share your thoughts..."
+              className="w-full border border-gray-200 rounded-lg p-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              value={newReview.text}
+              onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
+            />
+            <div className="flex items-center gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  size={22}
+                  className={`cursor-pointer ${newReview.rating >= star ? "text-yellow-400" : "text-gray-300"}`}
+                  onClick={() => setNewReview({ ...newReview, rating: star })}
+                />
+              ))}
+            </div>
+            <button
+              onClick={submitReview}
+              disabled={submitting}
+              className="w-full md:w-auto px-8 py-3 bg-indigo-600 text-white font-medium rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-50"
+            >
+              {submitting ? "Submitting..." : "Submit Review"}
+            </button>
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 text-lg">Please log in to leave a review.</p>
+        )}
+
+        <div className="space-y-5">
           {reviews.length === 0 && <p className="text-center text-gray-500">No reviews yet.</p>}
 
           {reviews.map((r) => {
             const isOwner = r.user._id === currentUserId;
             const isEditing = editing[r._id] != null;
-
             return (
-              <div key={r._id} className="bg-white rounded-xl p-4 shadow flex flex-col gap-2">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-semibold">
+              <div
+                key={r._id}
+                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center font-semibold text-lg">
                       {r.user.firstName[0]}
                     </div>
-                    <span className="font-semibold text-gray-800">
+                    <span className="font-semibold text-gray-800 text-lg">
                       {r.user.firstName} {r.user.lastName}
                     </span>
                   </div>
-                  <span className="text-gray-500 text-sm">
-                    {new Date(r.createdAt).toLocaleDateString()}
-                  </span>
+                  <span className="text-gray-400 text-sm">{new Date(r.createdAt).toLocaleDateString()}</span>
                 </div>
 
-                <div className="flex gap-1">
+                <div className="flex gap-1 mb-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FaStar
                       key={star}
-                      size={16}
+                      size={18}
                       className={`${
-                        isEditing ? (editing[r._id].rating >= star ? "text-yellow-400" : "text-gray-300")
-                        : (r.rating >= star ? "text-yellow-400" : "text-gray-300")
+                        isEditing
+                          ? editing[r._id].rating >= star
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                          : r.rating >= star
+                          ? "text-yellow-400"
+                          : "text-gray-300"
                       }`}
                       onClick={() => {
-                        if (isEditing) setEditing((prev) => ({ ...prev, [r._id]: { ...prev[r._id], rating: star } }));
+                        if (isEditing)
+                          setEditing((prev) => ({
+                            ...prev,
+                            [r._id]: { ...prev[r._id], rating: star },
+                          }));
                       }}
                     />
                   ))}
@@ -160,14 +188,14 @@ export default function ReviewsPage() {
                     onChange={(e) =>
                       setEditing((prev) => ({ ...prev, [r._id]: { ...prev[r._id], text: e.target.value } }))
                     }
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                   />
                 ) : (
-                  <p className="text-gray-700">{r.text}</p>
+                  <p className="text-gray-700 leading-relaxed">{r.text}</p>
                 )}
 
                 {isOwner && (
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex gap-3 mt-4">
                     {isEditing ? (
                       <>
                         <button
@@ -178,7 +206,7 @@ export default function ReviewsPage() {
                         </button>
                         <button
                           onClick={() => setEditing((prev) => ({ ...prev, [r._id]: null }))}
-                          className="flex-1 bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition"
+                          className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition"
                         >
                           Cancel
                         </button>
