@@ -4,23 +4,29 @@ import toast from "react-hot-toast"
 import Loader from "../../components/loader"
 import { Link, useNavigate } from "react-router-dom"
 import { BiEdit } from "react-icons/bi"
+import Paginator from "../../components/paginator.jsx"
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
+  //pagination ----------------------------------
+  const [page , setPage] = useState(1)
+  const [totalPages , setTotalpages] = useState(0)
+  const [limit , setLimit] = useState(10)
 
   useEffect(() => {
     const token = localStorage.getItem("token")
 
     axios
-      .get(import.meta.env.VITE_BACKEND_URL + "/api/orders/", {
+      .get(import.meta.env.VITE_BACKEND_URL + "/api/orders/"+page+"/"+limit, {
         headers: {
           Authorization: "Bearer " + token,
         },
       })
       .then((res) => {
-        setOrders(res.data)
+        setOrders(res.data.orders)
+        setTotalpages(res.data.totalPages)
         setLoading(false)
       })
       .catch((error) => {
@@ -28,7 +34,7 @@ export default function OrdersPage() {
         toast.error("Failed to fetch orders")
         setLoading(false)
       })
-  }, [loading])
+  }, [page, limit])
 
   return (
     <div className="w-full h-full">
@@ -126,6 +132,9 @@ export default function OrdersPage() {
                   )}
                 </tbody>
               </table>
+              
+              <Paginator currentPage={page} setCurrentPage={setPage} totalPages={totalPages} limit={limit} setLimit={setLimit} setLoading={setLoading}/>
+
             </div>
           </div>
         </div>
