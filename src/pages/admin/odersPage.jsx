@@ -15,6 +15,8 @@ export default function OrdersPage() {
   const [totalPages , setTotalpages] = useState(0)
   const [limit , setLimit] = useState(10)
 
+  const [popUpVissible, setPopUpVissible] = useState(false)
+
   useEffect(() => {
     const token = localStorage.getItem("token")
 
@@ -67,7 +69,10 @@ export default function OrdersPage() {
                     orders.map((order) => (
                       <tr
                         key={order.orderId}
-                        className="hover:bg-gray-50 transition"
+                        className="hover:bg-gray-300 transition"
+                        onClick={
+                          ()=>{setPopUpVissible(true)}
+                        }
                       >
                         <td className="px-6 py-4 font-medium text-gray-900">
                           {order.orderId}
@@ -132,6 +137,14 @@ export default function OrdersPage() {
                   )}
                 </tbody>
               </table>
+
+              {
+                popUpVissible && (
+                  <div className="fixed top-0 left-0 w-full h-full bg-[#00000050]">
+
+                  </div>
+                )
+              }
               
               <Paginator currentPage={page} setCurrentPage={setPage} totalPages={totalPages} limit={limit} setLimit={setLimit} setLoading={setLoading}/>
 

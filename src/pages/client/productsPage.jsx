@@ -2,30 +2,24 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import Loader from "../../components/loader"
 import ProductCard from "../../components/productCard"
-import { useParams } from "react-router-dom"
-import SearchBar from "../../components/searchBar"
+
+import Paginator from "../../components/paginator"
 
 export default function ProductsPage (){
     const [products , setProducts] = useState([])
     const [loading , setLoading] = useState(true)
 
-    const {keyword}  = useParams()
+    const [page, setPage] = useState(1)
+    const [limit, setLimit] = useState(10)
+    const [totalPages, setTotalPages] = useState(1)
 
     useEffect(() => {
         setLoading(true);
 
-        let url;
-        if (keyword) {
-            // ✅ fetch products by search keyword
-            url = `${import.meta.env.VITE_BACKEND_URL}/api/products/search/${keyword}`;
-        } else {
-            // ✅ fetch all products
-            url = `${import.meta.env.VITE_BACKEND_URL}/api/products`;
-        }
-
-        axios.get(url)
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${page}/${limit}`)
             .then((res) => {
-                setProducts(res.data);
+                setProducts(res.data.products);
+                setTotalPages(res.data.totalPages)
                 setLoading(false);
             })
             .catch((err) => {
@@ -34,7 +28,7 @@ export default function ProductsPage (){
                 setLoading(false);
             });
 
-    }, [keyword]);   // ✅ refetch whenever keyword changes
+    }, [page,limit]);  
 
 
 
@@ -57,7 +51,7 @@ export default function ProductsPage (){
 
     return(
         <div className="w-full h-full flex flex-col gap-5">
-            <div className="p-[15px] flex items-center justify-center bg-blue-200"><SearchBar/></div>
+
             <div className="w-full h-full">
                 { 
                     loading? <Loader/> : 
@@ -73,6 +67,9 @@ export default function ProductsPage (){
                         }
                     </div>
                 }
+            </div>
+            <div className="mt-12 flex justify-center">
+                <Paginator currentPage={page} setCurrentPage={setPage} totalPages={totalPages} limit={limit} setLimit={setLimit} setLoading={setLoading}/>
             </div>
         </div>
     )
