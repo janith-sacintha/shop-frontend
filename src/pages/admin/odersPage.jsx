@@ -16,6 +16,9 @@ export default function OrdersPage() {
   const [limit , setLimit] = useState(10)
 
   const [popUpVissible, setPopUpVissible] = useState(false)
+  const [clickedOrder, setClickedOrder] = useState(null)
+  const [status, setStatus] = useState("pending");
+  const [notes , setNotes] = useState("")
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -36,7 +39,30 @@ export default function OrdersPage() {
         toast.error("Failed to fetch orders")
         setLoading(false)
       })
-  }, [page, limit])
+  }, [page, limit,loading])
+
+const handleUpdate = async () => {
+    setPopUpVissible(false)
+    try {
+      
+      const token = localStorage.getItem("token"); // if needed for auth
+      await axios.put(
+        import.meta.env.VITE_BACKEND_URL+"/api/orders/"+clickedOrder.orderId, 
+        {
+          status : status
+          ,notes : notes
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Order status updated successfully!");
+      setLoading(true);
+      
+    } catch (error) {
+      toast.error("Failed to update order");
+      console.log(error)
+    }
+  };
+
 
   return (
     <div className="w-full h-full">
@@ -61,7 +87,7 @@ export default function OrdersPage() {
                     <th className="px-6 py-3">Total</th>
                     <th className="px-6 py-3">Date</th>
                     <th className="px-6 py-3">Status</th>
-                    <th className="px-6 py-3">Action</th>
+                    
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -71,7 +97,13 @@ export default function OrdersPage() {
                         key={order.orderId}
                         className="hover:bg-gray-300 transition"
                         onClick={
-                          ()=>{setPopUpVissible(true)}
+                          ()=>
+                            {
+                              setNotes(order.notes)
+                              setStatus(order.status)
+                              setClickedOrder(order)
+                              setPopUpVissible(true)                            
+                            }
                         }
                       >
                         <td className="px-6 py-4 font-medium text-gray-900">
@@ -111,6 +143,8 @@ export default function OrdersPage() {
                           </span>
 
                         </td>
+                        {
+                        /*
                         <td className="px-6 py-4">
                           <BiEdit
                             className="text-xl cursor-pointer bg-blue-500 text-white font-bold h-[30px] w-[30px] rounded-md p-[5px]"
@@ -123,6 +157,8 @@ export default function OrdersPage() {
                             Update
                           </BiEdit>
                         </td>
+                        */
+                        }
                       </tr>
                     ))
                   ) : (
@@ -140,9 +176,134 @@ export default function OrdersPage() {
 
               {
                 popUpVissible && (
-                  <div className="fixed top-0 left-0 w-full h-full bg-[#00000050]">
+                  <div className="fixed top-0 left-0 w-full h-full bg-[#00000050] flex items-center justify-center">
+                    
+                      {
+                        <div className="bg-white shadow-xl rounded-2xl w-[800px] h-[850px] p-8 relative">
 
-                  </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                              <label className="text-gray-600 font-medium">Order ID</label>
+                              <p className="mt-1 text-gray-800">{clickedOrder.orderId}</p>
+                            </div>
+
+                            <div>
+                              <label className="text-gray-600 font-medium">Customer Name</label>
+                              <p className="mt-1 text-gray-800">{clickedOrder.name}</p>
+                            </div>
+
+                            <div>
+                              <label className="text-gray-600 font-medium">Email</label>
+                              <p className="mt-1 text-gray-800">{clickedOrder.email}</p>
+                            </div>
+
+                            <div>
+                              <label className="text-gray-600 font-medium">Phone</label>
+                              <p className="mt-1 text-gray-800">{clickedOrder.phone}</p>
+                            </div>
+
+                            <div className="md:col-span-2">
+                              <label className="text-gray-600 font-medium">Address</label>
+                              <p className="mt-1 text-gray-800">{clickedOrder.address}</p>
+                            </div>
+                          </div>
+
+                          <div className="mb-6">
+                            <label className="text-gray-600 font-medium">Items</label>
+                            <div className="mt-2 border rounded-lg p-4 bg-gray-50 overflow-y-scroll h-[100px]">
+                              {clickedOrder.items.map((item, index) => (
+                                <div key={index} className="flex items-center mb-3 last:mb-0">
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-16 h-16 object-cover rounded mr-4"
+                                  />
+                                  <div>
+                                    <p className="font-semibold text-gray-800">{item.name}</p>
+                                    <p className="text-gray-600">Qty: {item.qty}</p>
+                                    <p className="text-gray-600">Price: LKR {item.price.toLocaleString("en-US", {
+                                              minimumFractionDigits: 2,
+                                              maximumFractionDigits: 2,
+                                            })}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mb-6">
+                            <label className="text-gray-600 font-medium">Notes</label>
+                            <textarea 
+                              className="w-full h-[100px] overflow-y-auto border-[1px] rounded-2xl mt-2 p-[5px]"
+                              value={notes}
+                              onChange={(e)=>{setNotes(e.target.value)}}
+                            >
+
+                            </textarea>
+                          </div>
+
+                          <div className="mb-6">
+                            <label className="text-gray-600 font-medium">Total</label>
+                            <p className="mt-1 text-gray-800">LKR {clickedOrder.total.toLocaleString("en-US", {
+                                              minimumFractionDigits: 2,
+                                              maximumFractionDigits: 2,
+                                            })}</p>
+                          </div>
+
+                          <div className="mb-6">
+                              <label className="text-gray-600 font-medium">Status</label>
+                              <div className="relative mt-1">
+                                <select
+                                  value={status}
+                                  onChange={(e) => setStatus(e.target.value)}
+                                  className={`
+                                    appearance-none w-full py-3 px-4 pr-10 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all
+                                    ${status === "pending" ? "bg-yellow-100 border-yellow-400 text-yellow-800" : ""}
+                                    ${status === "processing" ? "bg-blue-100 border-blue-400 text-blue-800" : ""}
+                                    ${status === "shipped" ? "bg-indigo-100 border-indigo-400 text-indigo-800" : ""}
+                                    ${status === "delivered" ? "bg-green-100 border-green-400 text-green-800" : ""}
+                                    ${status === "cancelled" ? "bg-red-100 border-red-400 text-red-800" : ""}
+                                  `}
+                                >
+                                  <option value="pending">Pending</option>
+                                  <option value="processing">Processing</option>
+                                  <option value="shipped">Shipped</option>
+                                  <option value="delivered">Delivered</option>
+                                  <option value="cancelled">Cancelled</option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                
+                              </div>
+                            </div>
+                          </div>
+
+                          {
+                          (status!=clickedOrder.status || notes!=clickedOrder.notes) && <button
+                            onClick={handleUpdate}
+                            disabled={loading}
+                            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                          >
+                            {loading ? "Updating..." : "Update Status"}
+                          </button>
+                          }
+
+                          {
+                            <button 
+                              className="absolute right-[-30px] top-[-30px] bg-red-500 border-[1px] border-red-500 text-white font-bold h-[30px] w-[30px] rounded-full cursor-pointer hover:text-red-500 hover:bg-transparent"
+                              onClick={
+                                ()=>{setPopUpVissible(false)}
+                              }
+                            >
+                              X
+                            </button>
+                          }
+
+                        </div>
+                      }
+
+                      
+                    </div>
+                  
                 )
               }
               
