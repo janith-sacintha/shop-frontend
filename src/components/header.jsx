@@ -16,6 +16,15 @@ export default function Header() {
             Itoya
           </div>
           <div className="flex flex-col gap-6 text-white p-8 text-xl font-semibold">
+            <button
+              className="hover:text-yellow-200 transition bg-white/10 p-2 rounded-lg text-left"
+              onClick={()=>{
+                setIsOpen(false);
+                navigate("/");
+                }}
+            >
+              Home
+            </button>
             <button 
               className="hover:text-yellow-200 transition bg-white/10 p-2 rounded-lg text-left"
               onClick={()=>{
@@ -107,9 +116,6 @@ export default function Header() {
             className="relative w-10 h-10 flex items-center justify-center rounded-full bg-yellow-400 text-blue-800 hover:bg-yellow-300 transition"
           >
             <BiCart size={22} />
-            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-              2
-            </span>
           </Link>
         </div>
       </div>
