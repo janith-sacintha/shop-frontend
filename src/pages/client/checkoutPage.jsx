@@ -82,16 +82,15 @@ export default function CheckoutPage() {
         Checkout
       </h1>
 
-      {/* Cart Items */}
       <div className="flex flex-col gap-6 w-full max-w-4xl">
         {cart.map((item, index) => (
           <div
             key={item.productId}
-            className="flex items-center bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition overflow-hidden"
+            className="flex flex-col md:flex-row items-center gap-[10px] md:gap-0 pb-[20px] md:pb-0 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition overflow-hidden"
           >
             <img
               src={item.image}
-              className="w-32 h-32 object-cover rounded-l-2xl"
+              className="w-full md:w-32 h-50 md:h-32 object-cover md:rounded-2xl rounded-l-2xl"
             />
 
             <div className="flex-1 px-6 py-4 flex flex-col justify-center">
@@ -140,7 +139,7 @@ export default function CheckoutPage() {
               </button>
             </div>
 
-            <div className="px-6 font-semibold text-gray-700">
+            <div className="px-6 font-semibold text-gray-700 text-center">
               LKR{" "}
               {(item.quantity * item.price).toLocaleString("en-us", {
                 minimumFractionDigits: 2,
@@ -149,7 +148,7 @@ export default function CheckoutPage() {
             </div>
 
             <button
-              className="mr-6 p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition"
+              className="lg:mr-6 p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition"
               onClick={() => {
                 const newCart = [...cart]
                 newCart.splice(index, 1)
@@ -162,7 +161,6 @@ export default function CheckoutPage() {
         ))}
       </div>
 
-      {/* Customer Details */}
       <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl border border-gray-100 p-8 space-y-5">
         <h2 className="text-xl font-bold text-gray-800">Customer Details</h2>
         <input
@@ -188,7 +186,6 @@ export default function CheckoutPage() {
         />
       </div>
 
-      {/* Total + Place Order */}
       <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl border border-gray-100 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <span className="text-xl font-bold text-gray-800">
           Total:{" "}

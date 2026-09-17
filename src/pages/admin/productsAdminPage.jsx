@@ -4,25 +4,31 @@ import toast from "react-hot-toast";
 import { BiEdit, BiPlus, BiTrash } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../components/loader";
+import Paginator from "../../components/paginator";
 
 export default function ProductsAdminPage() {
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const [page , setPage] = useState(1)
+  const [totalPages , setTotalpages] = useState(0)
+  const [limit , setLimit] = useState(10)
 
   useEffect(() => {
-    if (isLoading) {
-      axios.get(import.meta.env.VITE_BACKEND_URL + "/api/products").then((res) => {
-        setProducts(res.data);
-        setIsLoading(false);
+    if (loading) {
+      axios.get(import.meta.env.VITE_BACKEND_URL + "/api/products/"+page+"/"+limit).then((res) => {
+        setProducts(res.data.products);
+        setTotalpages(res.data.totalPages)
+        setLoading(false);
       });
     }
-  }, [isLoading]);
+  }, [loading]);
 
   const navigate = useNavigate();
 
   return (
     <div className="w-full h-full bg-gray-100 p-6">
-      {isLoading ? (
+      {loading ? (
         <Loader/>
       ) : (
         <div className="bg-white shadow-xl rounded-xl overflow-hidden">
@@ -91,7 +97,7 @@ export default function ProductsAdminPage() {
                             )
                             .then((res) => {
                               toast.success("Product deleted successfully");
-                              setIsLoading(!isLoading);
+                              setLoading(!loading);
                             })
                             .catch((error) => {
                               toast.error("Failed to delete the product");
@@ -112,6 +118,7 @@ export default function ProductsAdminPage() {
               })}
             </tbody>
           </table>
+            <Paginator currentPage={page} setCurrentPage={setPage} totalPages={totalPages} limit={limit} setLimit={setLimit} setLoading={setLoading}/>
         </div>
       )}
       <Link

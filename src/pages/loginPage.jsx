@@ -2,11 +2,36 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useGoogleLogin } from "@react-oauth/google";
+
+const clientSecret = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const googleLogin = useGoogleLogin({
+    onSuccess: (response) => {
+      axios
+        .post(`${import.meta.env.VITE_BACKEND_URL}/api/users/google-login`, {
+          token: response.access_token,
+        })
+        .then((res) => {
+          localStorage.setItem("token", res.data.token);
+          toast.success("Google login successful");
+          if (res.data.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        })
+        .catch((error) => {
+          console.error("Google login failed:", error);
+          toast.error("Google login failed");
+        });
+    }
+  });
 
   async function login() {
     try {
@@ -65,6 +90,13 @@ export default function LoginPage() {
           className="cursor-pointer w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition"
         >
           Login
+        </button>
+        {/* Google Login Button */}
+        <button
+          onClick={() => googleLogin()}
+          className="cursor-pointer w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition"
+        >
+          Login with Google
         </button>
 
         {/* Register link */}

@@ -57,7 +57,7 @@ export default function ProductOverviewPage() {
 
           <div className="mt-8">
             {product.labelledPrice > product.price ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 whitespace-nowrap">
                 <span className="line-through text-red-500 text-lg font-medium">
                   LKR {product.labelledPrice.toLocaleString("en-us")}
                 </span>

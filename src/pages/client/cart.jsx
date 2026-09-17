@@ -28,7 +28,7 @@ export default function CartPage() {
           cart.map((item) => (
             <div
               key={item.productId}
-              className="flex items-center bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition overflow-hidden"
+              className="flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition overflow-hidden"
             >
               <img
                 src={item.image}

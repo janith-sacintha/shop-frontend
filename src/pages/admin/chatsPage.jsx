@@ -90,27 +90,7 @@ export default function AdminChatPanel() {
               ))}
             </div>
 
-            <div className="p-5 border-t bg-white shadow-md space-y-3">
-              <input
-                type="text"
-                className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Email Subject"
-                value={emailSubject}
-                onChange={(e) => setEmailSubject(e.target.value)}
-              />
-              <textarea
-                className="w-full border rounded-xl px-4 py-3 h-32 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Write your reply..."
-                value={emailBody}
-                onChange={(e) => setEmailBody(e.target.value)}
-              />
-              <button
-                onClick={handleSendEmail}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 font-medium transition shadow-md"
-              >
-                <FiMail size={18} /> Send Email
-              </button>
-            </div>
+            
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">

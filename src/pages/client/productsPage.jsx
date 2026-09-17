@@ -66,11 +66,15 @@ export default function ProductsPage (){
                             )
                         }
                     </div>
+                    
                 }
+
+                <div className="mt-12 flex justify-center">
+                    <Paginator currentPage={page} setCurrentPage={setPage} totalPages={totalPages} limit={limit} setLimit={setLimit} setLoading={setLoading}/>
+                </div>
             </div>
-            <div className="mt-12 flex justify-center">
-                <Paginator currentPage={page} setCurrentPage={setPage} totalPages={totalPages} limit={limit} setLimit={setLimit} setLoading={setLoading}/>
-            </div>
+            
+            
         </div>
     )
         
