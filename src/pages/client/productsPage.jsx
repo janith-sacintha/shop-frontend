@@ -13,24 +13,38 @@ export default function ProductsPage (){
     const [limit, setLimit] = useState(10)
     const [totalPages, setTotalPages] = useState(1)
 
+    const [query, setQuery] = useState("")
+
     useEffect(() => {
         setLoading(true);
 
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${page}/${limit}`)
-            .then((res) => {
-                setProducts(res.data.products);
-                setTotalPages(res.data.totalPages)
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setProducts([]);
-                setLoading(false);
-            });
+        if (query == "") {
+            axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${page}/${limit}`)
+                .then((res) => {
+                    setProducts(res.data.products);
+                    setTotalPages(res.data.totalPages)
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    setProducts([]);
+                    setLoading(false);
+                });
+        } else {
+            axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/search/${query}/${page}/${limit}`)
+                .then((res) => {
+                    setProducts(res.data.products);
+                    setTotalPages(res.data.totalPages)
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    setProducts([]);
+                    setLoading(false);
+                });
+        }
 
-    }, [page,limit]);  
-
-
+    }, [page, limit, query]);
 
     /*
     useEffect(
@@ -51,7 +65,14 @@ export default function ProductsPage (){
 
     return(
         <div className="w-full h-full flex flex-col gap-5">
-
+            <div className="w-full flex justify-center items-center">    
+                <input className="mt-[20px] w-[70%] h-[40px] rounded-[5px] border-[1px] border-[#ccc] p-[10px]"
+                    type="text"
+                    placeholder="Search products..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+            </div>
             <div className="w-full h-full">
                 { 
                     loading? <Loader/> : 
