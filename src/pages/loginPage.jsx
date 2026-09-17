@@ -55,57 +55,57 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-700">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 flex flex-col items-center gap-6">
-        <h1 className="text-4xl font-extrabold text-white mb-4">Welcome Back</h1>
-        <p className="text-white/70 text-center mb-6">
+    <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 via-white to-orange-200">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-orange-200 p-8 flex flex-col items-center gap-6">
+        <h1 className="text-4xl font-extrabold text-orange-600 mb-4">Welcome Back</h1>
+        <p className="text-gray-500 text-center mb-6">
           Please enter your credentials to continue
         </p>
 
         {/* Email */}
         <div className="w-full">
-          <label className="block text-white/80 text-sm mb-2">Email</label>
+          <label className="block text-gray-700 text-sm mb-2">Email</label>
           <input
             type="email"
             placeholder="Enter your email"
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-orange-200 bg-orange-50 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-orange-400 outline-none"
           />
         </div>
 
         {/* Password */}
         <div className="w-full">
-          <label className="block text-white/80 text-sm mb-2">Password</label>
+          <label className="block text-gray-700 text-sm mb-2">Password</label>
           <input
             type="password"
             placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-orange-200 bg-orange-50 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-orange-400 outline-none"
           />
         </div>
 
         {/* Login Button */}
         <button
           onClick={login}
-          className="cursor-pointer w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition"
+          className="cursor-pointer w-full py-3 bg-orange-500 text-white font-semibold rounded-xl shadow-lg hover:bg-orange-600 transition"
         >
           Login
         </button>
         {/* Google Login Button */}
         <button
           onClick={() => googleLogin()}
-          className="cursor-pointer w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition"
+          className="cursor-pointer w-full py-3 bg-white text-orange-600 font-semibold rounded-xl shadow-lg border border-orange-400 hover:bg-orange-50 transition"
         >
           Login with Google
         </button>
 
         {/* Register link */}
-        <p className="text-white/80 text-sm mt-4">
+        <p className="text-gray-600 text-sm mt-4">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-purple-300 font-semibold hover:underline">
+          <Link to="/register" className="text-orange-600 font-semibold hover:underline">
             Sign up
           </Link>
-          <Link to="/forget" className="text-purple-300 font-semibold hover:underline ml-4">
+          <Link to="/forget" className="text-orange-600 font-semibold hover:underline ml-4">
             Forgot Password?
           </Link>
         </p>
