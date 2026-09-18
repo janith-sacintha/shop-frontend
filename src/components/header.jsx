@@ -1,8 +1,8 @@
-import { BiCart, BiShoppingBag, BiUser } from "react-icons/bi"
-import { GiHamburgerMenu } from "react-icons/gi"
-import { HiX } from "react-icons/hi"
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { BiCart, BiShoppingBag, BiUser, BiX } from "react-icons/bi";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { LuLogIn, LuLogOut } from "react-icons/lu";
 
 const NAV_LINKS = [
   { label: "Home", to: "/" },
@@ -10,65 +10,87 @@ const NAV_LINKS = [
   { label: "Reviews", to: "/reviews" },
   { label: "About Us", to: "/about-us" },
   { label: "Contact Us", to: "/contact-us" },
-]
+];
 
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Header({ cartCount = 0 }) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  // Lock body scroll while the mobile drawer is open, and let Escape close it.
+  useEffect(() => {
+    if (isDrawerOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setIsDrawerOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isDrawerOpen]);
 
   const goTo = (path) => {
-    setIsOpen(false);
+    setIsDrawerOpen(false);
     navigate(path);
   };
 
-  return (
-    <header className="h-16 md:h-20 bg-gradient-to-r from-orange-500 to-orange-600 text-white sticky top-0 z-30 shadow-lg p-[20px]">
-      <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsDrawerOpen(false);
+    navigate("/login");
+  };
 
+  const navLinkClass = ({ isActive }) =>
+    `relative py-1 transition-colors hover:text-white ${
+      isActive ? "text-white after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-full after:bg-white" : "text-white/80"
+    }`;
+
+  return (
+    <header className="sticky top-0 z-30 bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
         {/* Left: hamburger (mobile) + logo */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex shrink-0 items-center gap-3">
           <button
+            type="button"
             aria-label="Open menu"
-            onClick={() => setIsOpen(true)}
-            className="md:hidden flex items-center justify-center w-9 h-9 rounded-md bg-white/15 hover:bg-white/25 transition"
+            aria-expanded={isDrawerOpen}
+            onClick={() => setIsDrawerOpen(true)}
+            className="flex h-9 w-9 items-center justify-center rounded-md bg-white/15 transition hover:bg-white/25 md:hidden"
           >
             <GiHamburgerMenu size={20} />
           </button>
 
           <Link
             to="/"
-            className="text-xl sm:text-2xl font-extrabold tracking-wide hover:text-yellow-300 transition"
+            className="shrink-0 text-xl font-extrabold tracking-wide transition hover:text-yellow-300 sm:text-2xl"
           >
             Itoya
           </Link>
         </div>
 
         {/* Center: desktop nav */}
-        <nav className="hidden md:flex items-center gap-6 font-medium text-lg">
-          {NAV_LINKS.filter((l) => l.to !== "/").map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className="hover:text-yellow-200 transition"
-            >
+        <nav className="hidden flex-1 items-center justify-center gap-6 font-medium md:flex lg:gap-8">
+          {NAV_LINKS.map((link) => (
+            <NavLink key={link.to} to={link.to} end={link.to === "/"} className={navLinkClass}>
               {link.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 
         {/* Right: actions */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <Link
-            to="/register"
-            aria-label="Account"
-            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white text-orange-600 hover:bg-yellow-200 transition"
-          >
-            <BiUser size={20} />
-          </Link>
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
 
           <Link
             to="/my-orders"
-            className="flex items-center gap-2 bg-yellow-400 text-blue-800 font-semibold px-3 py-2 sm:px-4 rounded-lg hover:bg-yellow-300 transition"
+            aria-label="My orders"
+            className="flex items-center gap-2 rounded-lg bg-yellow-400 px-3 py-2 font-semibold text-blue-800 transition hover:bg-yellow-300 sm:px-4"
           >
             <BiShoppingBag size={20} />
             <span className="hidden sm:inline">My Orders</span>
@@ -76,47 +98,109 @@ export default function Header() {
 
           <Link
             to="/cart"
-            aria-label="Cart"
-            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-yellow-400 text-blue-800 hover:bg-yellow-300 transition"
+            aria-label={`Cart${cartCount ? `, ${cartCount} items` : ""}`}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-yellow-400 text-blue-800 transition hover:bg-yellow-300 sm:h-10 sm:w-10"
           >
             <BiCart size={20} />
+            {cartCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-[11px] font-bold leading-none text-white">
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            )}
           </Link>
+
+          {token ? (
+            <button
+              type="button"
+              aria-label="Log out"
+              onClick={handleLogout}
+              className="flex h-9 w-9 items-center justify-center gap-2 rounded-full bg-red-500 font-semibold text-white transition hover:bg-red-400 sm:h-auto sm:w-auto sm:rounded-lg sm:px-4 sm:py-2"
+            >
+              <LuLogOut size={19} />
+              <span className="hidden sm:inline">Log Out</span>
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              aria-label="Log in"
+              className="flex h-9 w-9 items-center justify-center gap-2 rounded-full bg-white/15 font-semibold text-white transition hover:bg-white/25 sm:h-auto sm:w-auto sm:rounded-lg sm:px-4 sm:py-2"
+            >
+              <LuLogIn size={19} />
+              <span className="hidden sm:inline">Login</span>
+            </Link>
+          )}
         </div>
       </div>
 
       {/* Mobile drawer */}
-      {isOpen && (
+      {isDrawerOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/40 z-40 md:hidden"
-            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-40 bg-black/40 md:hidden"
+            onClick={() => setIsDrawerOpen(false)}
           />
-          <div className="fixed top-0 left-0 h-screen w-72 max-w-[85%] bg-gradient-to-b from-orange-500 to-orange-400 z-50 md:hidden flex flex-col">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+            className="fixed left-0 top-0 z-50 flex h-screen w-72 max-w-[85%] flex-col bg-gradient-to-b from-orange-500 to-orange-400 md:hidden"
+          >
             <div className="flex items-center justify-between p-6">
-              <span className="text-3xl font-extrabold">Itoya</span>
+              <span className="text-2xl font-extrabold">Itoya</span>
               <button
+                type="button"
                 aria-label="Close menu"
-                onClick={() => setIsOpen(false)}
-                className="w-9 h-9 flex items-center justify-center rounded-md bg-white/15 hover:bg-white/25 transition"
+                onClick={() => setIsDrawerOpen(false)}
+                className="flex h-9 w-9 items-center justify-center rounded-md bg-white/15 transition hover:bg-white/25"
               >
-                <HiX size={22} />
+                <BiX size={22} />
               </button>
             </div>
 
-            <nav className="flex flex-col gap-3 px-6 text-lg font-semibold overflow-y-auto">
+            <nav className="flex flex-col gap-2 overflow-y-auto px-4 text-lg font-semibold">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.to}
-                  className="hover:text-yellow-200 transition bg-white/10 p-3 rounded-lg text-left"
+                  type="button"
+                  className="rounded-lg bg-white/10 p-3 text-left transition hover:bg-white/20"
                   onClick={() => goTo(link.to)}
                 >
                   {link.label}
                 </button>
               ))}
             </nav>
+
+            <div className="mt-auto flex flex-col gap-2 p-4 text-base font-semibold">
+              {!token && (
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-lg bg-white/10 p-3 text-left transition hover:bg-white/20"
+                  onClick={() => goTo("/register")}
+                >
+                  <BiUser size={20} /> Create account
+                </button>
+              )}
+              {token ? (
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-lg bg-red-500 p-3 text-left transition hover:bg-red-400"
+                  onClick={handleLogout}
+                >
+                  <LuLogOut size={20} /> Log Out
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-lg bg-white/10 p-3 text-left transition hover:bg-white/20"
+                  onClick={() => goTo("/login")}
+                >
+                  <LuLogIn size={20} /> Login
+                </button>
+              )}
+            </div>
           </div>
         </>
       )}
     </header>
-  )
+  );
 }
