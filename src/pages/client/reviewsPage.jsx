@@ -90,24 +90,31 @@ export default function ReviewsPage() {
       : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white py-12 flex justify-center">
-      <div className="w-11/12 md:w-3/4 lg:w-2/3 space-y-10">
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl font-extrabold text-indigo-700 tracking-tight">Website Reviews</h1>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 py-16 flex justify-center px-4">
+      <div className="w-full max-w-3xl space-y-12">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-extrabold text-indigo-700 tracking-tight drop-shadow-sm">
+            Website Reviews
+          </h1>
+          <p className="text-gray-500 text-lg">See what people are saying about us</p>
           {averageRating && (
-            <div className="flex justify-center items-center gap-2 text-yellow-500 text-2xl font-bold">
-              <FaStar className="text-yellow-400" />
-              <span>{averageRating}/5</span>
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-orange-100 px-5 py-2 rounded-full shadow-md">
+              <FaStar className="text-orange-400" />
+              <span className="text-indigo-700 font-bold text-xl">{averageRating}</span>
+              <span className="text-gray-400 text-sm">/ 5</span>
             </div>
           )}
         </div>
 
+        {/* Review form */}
         {token ? (
-          <div className="bg-white rounded-2xl shadow-lg p-6 space-y-5 border border-gray-100">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-8 space-y-6 border border-orange-100">
+            <h2 className="text-xl font-bold text-indigo-700">Leave a review</h2>
             <textarea
               rows={3}
               placeholder="Share your thoughts..."
-              className="w-full border border-gray-200 rounded-lg p-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition resize-none"
               value={newReview.text}
               onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
             />
@@ -115,8 +122,10 @@ export default function ReviewsPage() {
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                   key={star}
-                  size={22}
-                  className={`cursor-pointer ${newReview.rating >= star ? "text-yellow-400" : "text-gray-300"}`}
+                  size={26}
+                  className={`cursor-pointer transition-transform hover:scale-110 ${
+                    newReview.rating >= star ? "text-orange-400" : "text-gray-300"
+                  }`}
                   onClick={() => setNewReview({ ...newReview, rating: star })}
                 />
               ))}
@@ -124,17 +133,22 @@ export default function ReviewsPage() {
             <button
               onClick={submitReview}
               disabled={submitting}
-              className="w-full md:w-auto px-8 py-3 bg-indigo-600 text-white font-medium rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-50"
+              className="w-full md:w-auto px-8 py-3 bg-orange-600 text-white font-semibold rounded-xl shadow-md hover:bg-orange-700 hover:shadow-lg transform hover:-translate-y-0.5 transition disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {submitting ? "Submitting..." : "Submit Review"}
             </button>
           </div>
         ) : (
-          <p className="text-center text-gray-500 text-lg">Please log in to leave a review.</p>
+          <div className="bg-white/70 backdrop-blur-md border border-orange-100 rounded-3xl p-8 text-center shadow-md">
+            <p className="text-gray-500 text-lg">Please log in to leave a review.</p>
+          </div>
         )}
 
-        <div className="space-y-5">
-          {reviews.length === 0 && <p className="text-center text-gray-500">No reviews yet.</p>}
+        {/* Reviews list */}
+        <div className="space-y-6">
+          {reviews.length === 0 && (
+            <p className="text-center text-gray-500">No reviews yet.</p>
+          )}
 
           {reviews.map((r) => {
             const isOwner = r.user._id === currentUserId;
@@ -142,21 +156,23 @@ export default function ReviewsPage() {
             return (
               <div
                 key={r._id}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300"
+                className="bg-white/90 backdrop-blur-md rounded-3xl p-7 shadow-md border border-orange-100 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
               >
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center font-semibold text-lg">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
                       {r.user.firstName[0]}
                     </div>
-                    <span className="font-semibold text-gray-800 text-lg">
+                    <span className="font-semibold text-indigo-700 text-lg">
                       {r.user.firstName} {r.user.lastName}
                     </span>
                   </div>
-                  <span className="text-gray-400 text-sm">{new Date(r.createdAt).toLocaleDateString()}</span>
+                  <span className="text-gray-400 text-sm">
+                    {new Date(r.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
 
-                <div className="flex gap-1 mb-2">
+                <div className="flex gap-1 mb-3">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FaStar
                       key={star}
@@ -164,10 +180,10 @@ export default function ReviewsPage() {
                       className={`${
                         isEditing
                           ? editing[r._id].rating >= star
-                            ? "text-yellow-400"
+                            ? "text-orange-400"
                             : "text-gray-300"
                           : r.rating >= star
-                          ? "text-yellow-400"
+                          ? "text-orange-400"
                           : "text-gray-300"
                       }`}
                       onClick={() => {
@@ -188,25 +204,25 @@ export default function ReviewsPage() {
                     onChange={(e) =>
                       setEditing((prev) => ({ ...prev, [r._id]: { ...prev[r._id], text: e.target.value } }))
                     }
-                    className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition resize-none"
                   />
                 ) : (
-                  <p className="text-gray-700 leading-relaxed">{r.text}</p>
+                  <p className="text-gray-600 leading-relaxed">{r.text}</p>
                 )}
 
                 {isOwner && (
-                  <div className="flex gap-3 mt-4">
+                  <div className="flex gap-3 mt-5">
                     {isEditing ? (
                       <>
                         <button
                           onClick={() => updateReview(r._id)}
-                          className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition"
+                          className="flex-1 bg-orange-600 text-white px-4 py-2.5 rounded-xl shadow-md hover:bg-orange-700 transition font-medium"
                         >
                           Save
                         </button>
                         <button
                           onClick={() => setEditing((prev) => ({ ...prev, [r._id]: null }))}
-                          className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition"
+                          className="flex-1 bg-gray-100 text-gray-600 px-4 py-2.5 rounded-xl shadow-sm hover:bg-gray-200 transition font-medium"
                         >
                           Cancel
                         </button>
@@ -215,13 +231,13 @@ export default function ReviewsPage() {
                       <>
                         <button
                           onClick={() => setEditing((prev) => ({ ...prev, [r._id]: { text: r.text, rating: r.rating } }))}
-                          className="flex-1 bg-yellow-400 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-500 transition"
+                          className="flex-1 bg-orange-50 text-orange-700 border border-orange-200 px-4 py-2.5 rounded-xl hover:bg-orange-100 transition font-medium"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => deleteReview(r._id)}
-                          className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
+                          className="flex-1 bg-white text-red-500 border border-red-200 px-4 py-2.5 rounded-xl hover:bg-red-50 transition font-medium"
                         >
                           Delete
                         </button>
