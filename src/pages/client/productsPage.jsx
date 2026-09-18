@@ -65,8 +65,13 @@ export default function ProductsPage (){
 
     return(
         <div className="w-full h-full flex flex-col gap-5">
-            <div className="w-full flex justify-center items-center">    
-                <input className="mt-[20px] w-[70%] h-[40px] rounded-[5px] border-[1px] border-[#ccc] p-[10px]"
+            <div className="w-full flex justify-center items-center px-4">
+                <input
+                    className="mt-4 sm:mt-5 w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl
+                            h-11 sm:h-12 rounded-md border border-[#ccc] px-4 py-2
+                            text-sm sm:text-base
+                            focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent
+                            transition"
                     type="text"
                     placeholder="Search products..."
                     value={query}
