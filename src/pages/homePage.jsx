@@ -3,7 +3,7 @@ import { FiShoppingCart, FiArrowRight } from "react-icons/fi"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center bg-white text-gray-900 overflow-hidden">
       <main className="relative max-w-6xl mx-auto px-6 py-20 sm:py-28">
 
         {/* Decorative background blobs */}
@@ -11,7 +11,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute top-40 -left-32 w-96 h-96 bg-pink-200/40 rounded-full blur-3xl" />
 
         {/* Hero */}
-        <section className="relative grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <section className="relative grid grid-cols-1 gap-12 items-center">
           <div>
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold tracking-wide uppercase">
               Your local one-stop shop
